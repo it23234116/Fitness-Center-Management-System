@@ -7,8 +7,8 @@ const router = express.Router();
 const UserModel = require("../models/user");
 router.post("/", async (req, res) => {
   try {
-    const { email, firstName, lastName, password, role } = req.body; // Fix: Extract values properly
-    const user = new UserModel({ email, firstName, lastName, password, role });
+    const { email, firstName, lastName, password,phone,height,weight, role } = req.body; // Fix: Extract values properly
+    const user = new UserModel({ email, firstName, lastName, password,phone,height,weight, role });
 
     await user.save();
     res.status(201).json({ message: "User created successfully", user });
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 
 
 router.put("/:id", async (req, res) => {
-    const { firstName, lastName, email, role } = req.body;
+    const { firstName, lastName, email,phone,height,weight, role } = req.body;
   
     try {
       const user = await UserModel.findById(req.params.id);
@@ -36,6 +36,9 @@ router.put("/:id", async (req, res) => {
       if (firstName) user.firstName = firstName;
       if (lastName) user.lastName = lastName;
       if (email) user.email = email;
+      if (phone) user.phone = phone;
+      if (height) user.height = email;
+      if (weight) user.weight = weight;
       if (role) {
         if (!["admin", "member"].includes(role)) {
           return res.status(400).json({ message: "Invalid role" });

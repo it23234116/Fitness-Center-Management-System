@@ -3,13 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.8",
+    "@mui/material": "^6.4.8",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.8.4",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "https-browserify": "^1.0.0",
+    "process": "^0.11.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.4.0",
     "react-scripts": "5.0.1",
+    "redux": "^5.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -35,5 +51,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "webpack": "^5.98.0"
+  },
+  "browser": {
+    "http": "stream-http",
+    "https": "https-browserify",
+    "zlib": "browserify-zlib",
+    "util": "util",
+    "url": "url",
+    "buffer": "buffer",
+    "stream": "stream-browserify"
   }
 }

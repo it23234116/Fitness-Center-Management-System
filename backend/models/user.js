@@ -21,6 +21,18 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    height: {
+      type: String,
+      required: true,
+    },
+    weight: {
+      type: String,
+      required: true,
+    },
     role: {
       type: String,
       enum: ["admin", "member"], // Allowed roles are only "admin" and "member"
