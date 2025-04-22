@@ -4,12 +4,19 @@ import palette  from "./theme/palette"
 import Loading from "./components/Loading/Loading";
 import typography from "./theme/typography";
 import './App.css'
-
-
-
+import Navbar from "./components/Navbar/navbar"
+import Layout1 from "./Layout/layout1"
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
+import Layout2 from "./Layout/layout2"
 
 const Login = React.lazy(()=> import ("./pages/Login/login"))
 const Register = React.lazy(()=> import ("./pages/Register/register"))
+const Item01 = React.lazy(()=> import ("./pages/Item01/item01"))
+const Userinfo = React.lazy(()=> import ("./pages/Admin/Userinfo/userinfo"))
+const Profile =React.lazy(()=>import ("./pages/Profile/profile"))
+const Test =React.lazy(()=>import ("./pages/Test/test"))
+
+
 
 
 const theme = createTheme ({
@@ -17,23 +24,74 @@ const theme = createTheme ({
   typography,
 
 })
+
+
+  const router = createBrowserRouter(
+    [
+      {
+        path:"/",
+        element: <Login />,
+      },
+      {
+        path:"/register",
+        element: <Register />,
+      },
+      
+      {
+        path:"/profile",
+        element:( <ProtectedRoute allowedRoles={["member"]||["admin"]}><Profile /></ProtectedRoute>),
+      },
+      
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+          <Layout2/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/userinfo",
+            element: <Userinfo />,
+          },
+          // {
+          //   path:"path",
+          //   element:<Units01 />,
+          // }
+        ]
+      },
+
+
+
+
+
+
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["member"]}>
+          <Layout1/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/item01",
+            element: <Item01 />,
+          },
+          {
+            path:"/test",
+            element: <Test />,
+          },
+          
+        ]
+      }
+    ]
+  )
 function App() {
   return (
     <ThemeProvider theme={theme}>
-    <div className="App">
-      <Router>
-        <Routes>
-        <Route path="/" element={<React.Suspense fallback={<Loading />}><Login /></React.Suspense>} />
-        <Route path="/register" element={<React.Suspense fallback={<Loading />}><Register /></React.Suspense>} />
-
-          
-
-
-
-        </Routes>
-      </Router>
-    </div>
-    {/* <RouterProvider router={router} /> */}
+    
+    <RouterProvider router={router} />
 
     </ThemeProvider>
   );

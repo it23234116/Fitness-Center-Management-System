@@ -1,27 +1,16 @@
 import {
   Box,
   Button,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
   Grid,
-  IconButton,
-  MenuItem,
-  Modal,
-  Select,
   styled,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import Axios from "axios";
 import React, { useCallback, useState } from "react";
 import BG from "../../Assests/BG.jpg";
-import Logopng from "../../Assests/logo-no-background.png";
+import Logopng from "../../Assests/maxxieslogos.png";
 import FlexContainer from "../../components/FlexContainer/FlexContainer";
-import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
 
 const MainDiv = styled("div")({
@@ -66,32 +55,110 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [error, setError] = useState(""); 
+  const [confirmPassworderror, setConfirmPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [emaiFormatlError, setEmaiFormatlError] = useState("");
+  const [passworderror, setPasswordError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [heightError, setHeightError] = useState("");
+  const [weightError, setWeightError] = useState("");
 
   const navigate = useNavigate();
+  //   const validateInputs = () => {
 
-  const handleRegister = (e) => {
+  //     setErrors(tempErrors);
+  //     return Object.keys(tempErrors).length === 0;
+  //   };
+
+  const handleRegister = async (e) => {
     e.preventDefault(); // Prevent page reload
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const nameRegex = /^[A-Za-z]{2,50}$/;
+    const passwordRegex =
+      /^(?=.*?[0-9])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^0-9A-Za-z]).{8,32}$/;
+
+    const phoneRegex = /^0\d{9}$/;
+
+    if (!firstName.match(nameRegex)) {
+      setFirstNameError("Invalid first name.");
+      return;
+    }
+    setFirstNameError("");
+    if (!lastName.match(nameRegex)) {
+      setLastNameError("Invalid last name.");
+      return;
+    }
+    setLastNameError("");
+    if (!email.match(emailRegex)) {
+      setEmaiFormatlError("Invalid email format.");
+      return;
+    }
+    setEmaiFormatlError("");
+    console.log("Password:", password);
+    console.log("Regex Test:", passwordRegex.test(password));
+
+    if (!password.match(passwordRegex)) {
+      setPasswordError(
+        "Password must be between 8 and 32 characters, with uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
+    setPasswordError("");
     if (password !== confirmPassword) {
-        setError("Passwords do not match!");
+      setConfirmPasswordError("Passwords do not match!");
+      return;
+    }
+
+    // Reset error if passwords match
+    setConfirmPasswordError("");
+    if (!phone.match(phoneRegex)) {
+      setPhoneError("Phone number must start with '0' and be 10 digits.");
+      return;
+    }
+    setPhoneError("");
+    if (isNaN(height) || height < 50 || height > 250) {
+      setHeightError("Height must be between 50 and 250 cm.");
+      return;
+    }
+    setHeightError("");
+    if (isNaN(weight) || weight < 20 || weight > 300) {
+      setWeightError("Weight must be between 20 and 300 kg.");
+      return;
+    }
+    setWeightError("");
+
+    try {
+      // Check if the email already exists
+      const emailExists = await Axios.get(
+        `http://localhost:5000/user/email-check/${email}`
+      );
+      if (emailExists.data.exists) {
+        setEmailError("Email already exists! Please use a different one.");
         return;
       }
-  
-      // Reset error if passwords match
-      setError("");
-    Axios.post("http://localhost:5000/user", {
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-      phone: phone,
-      height: height,
-      weight: weight,
-      role: "member",
-    })
-    .then(() => navigate("/login")) // Redirect after successful registration
-    .catch((err) => console.error("Error registering user:", err));  };
 
+      // Reset email error if email is valid
+      setEmailError("");
+
+      // Proceed with the registration if email is not already taken
+      await Axios.post("http://localhost:5000/user", {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: password,
+        phone: phone,
+        height: height,
+        weight: weight,
+        role: "member",
+      });
+      navigate("/"); // Redirect after successful registration
+    } catch (err) {
+      console.error("Error registering user:", err);
+    }
+  };
   return (
     <MainDiv>
       <LoginDiv>
@@ -120,8 +187,11 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!firstNameError}
+                helperText={firstNameError}
                 onChange={(event) => {
                   setFirstName(event.target.value);
+                  setFirstNameError("");
                 }}
               />
             </Grid>
@@ -131,8 +201,11 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!lastNameError}
+                helperText={lastNameError}
                 onChange={(event) => {
                   setLastName(event.target.value);
+                  setLastNameError("");
                 }}
               />
             </Grid>
@@ -142,8 +215,12 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!emaiFormatlError || !!emailError} // Show error style if error exists
+                helperText={emaiFormatlError || emailError} // Show error message
                 onChange={(event) => {
                   setEmail(event.target.value);
+                  setEmaiFormatlError("");
+                  setEmailError("");
                 }}
               />
             </Grid>
@@ -154,8 +231,11 @@ function Register() {
                 type="password"
                 variant="outlined"
                 size="small"
+                error={!!passworderror}
+                helperText={passworderror}
                 onChange={(event) => {
                   setPassword(event.target.value);
+                  setPasswordError("");
                 }}
               />
             </Grid>
@@ -166,10 +246,11 @@ function Register() {
                 type="password"
                 variant="outlined"
                 size="small"
-                error={!!error} // Show error style if error exists
-                helperText={error} // Show error message
+                error={!!confirmPassworderror} // Show error style if error exists
+                helperText={confirmPassworderror} // Show error message
                 onChange={(event) => {
                   setconfirmPassword(event.target.value);
+                
                 }}
               />
             </Grid>
@@ -179,8 +260,11 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!phoneError}
+                helperText={phoneError}
                 onChange={(event) => {
                   setPhone(event.target.value);
+                  setPhoneError("");
                 }}
               />
             </Grid>
@@ -190,8 +274,11 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!heightError}
+                helperText={heightError}
                 onChange={(event) => {
                   setHeight(event.target.value);
+                  setHeightError("");
                 }}
               />
             </Grid>
@@ -201,13 +288,21 @@ function Register() {
                 fullWidth
                 variant="outlined"
                 size="small"
+                error={!!weightError}
+                helperText={weightError}
                 onChange={(event) => {
                   setWeight(event.target.value);
+                  setWeightError("");
                 }}
               />
             </Grid>
           </Grid>
-          <Button fullWidth sx={{ mt: 2 }} variant="contained" type="submit">
+          <Button
+            fullWidth
+            sx={{ mt: 2, backgroundColor: "#2168BA", color: "white" }}
+            variant="contained"
+            type="submit"
+          >
             Register
           </Button>
         </form>
@@ -218,11 +313,9 @@ function Register() {
             gap: 1,
           }}
         >
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => navigate("/")}
-          >
+          <Button fullWidth variant="outlined"
+          sx={{  backgroundColor: "white", color: "#2168BA" }}
+           onClick={() => navigate("/")}>
             I Already Have an Account
           </Button>
         </FlexContainer>

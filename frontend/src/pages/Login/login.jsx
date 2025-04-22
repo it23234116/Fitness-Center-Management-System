@@ -11,10 +11,12 @@ import React, { useState } from "react";
 //   import { setIsAuth } from "../../reducers/isAuthSlise";
 import { useDispatch } from "react-redux";
 import BG from "../../Assests/BG.jpg";
-import Logopng from "../../Assests/logo-no-background.png";
+//import Logopng from "../../Assests/logo-no-background.png";
+import Logopng from "../../Assests/maxxieslogos.png";
 import FlexContainer from "../../components/FlexContainer/FlexContainer";
 // import { Input as BaseInput } from '@mui/base/Input';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MainDiv = styled("div")({
   display: "flex",
@@ -49,13 +51,58 @@ const LoginDiv = styled(Box)(({ theme }) => ({
   padding: "20px",
 }));
 
+
+
 function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+const [passwordError, setPasswordError] = useState("");
+
+  
 
   const handleLogin = (e) => {
-    e.preventDefault(); // Prevent form submission refresh
-    navigate(""); // Navigate to the "/employeeinfo" page
-  };
+    e.preventDefault(); // Prevent page refresh
+
+    const data = { email, password };
+
+    axios.post("http://localhost:5000/user/login", data)
+        .then(response => {
+          console.log("API Response:", response.data);
+            const { token, user } = response.data; 
+            
+            if (token) {
+              localStorage.setItem("accessToken", token);
+              console.log("Token stored:", localStorage.getItem("accessToken"));
+
+              if (user.role === "admin") {
+                navigate("/userinfo");
+              } else if (user.role === "member") {
+                navigate("/item01");
+              } else {
+                setError("Invalid user role");
+              }
+            }
+        })
+        .catch(error => {
+          if (error.response) {
+            console.log("Error Response:", error.response);
+            
+            if (error.response.status === 404) {
+              setEmailError("User Doesn't Exist");
+            } else if (error.response.status === 401) {
+              setPasswordError("Wrong Username, Password Combination");
+            } else {
+              setPasswordError("Login failed. Please try again.");
+            }
+          } else {
+            setPasswordError("Something went wrong. Please try again.");
+          }
+        });
+};
+
   return (
     <MainDiv>
       <LoginDiv>
@@ -79,11 +126,15 @@ function Login() {
           <Box mt={3}>
             <TextField
               label="Username (email)"
-              // error={!!errors.username}
               fullWidth
               variant="outlined"
-              // {...register("username", { required: true })}
               size="small"
+              error={!!emailError}
+              helperText={emailError}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setEmailError("")
+              }}
             />
           </Box>
           <Box mt={2}>
@@ -95,25 +146,20 @@ function Login() {
               // error={!!errors.password}
               // {...register("password", { required: true })}
               size="small"
+              error={!!passwordError} // Show error style if error exists
+              helperText={passwordError} // Show error message
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setPasswordError("")
+              }}
             />
-            {/* <div
-                style={{ marginTop: "16px", color: "red", textAlign: "center" }}
-              >
-                {errors.password || errors.username ? (
-                  <>
-                    <p>*All Fields Must Be Filled!</p>
-                  </>
-                ) : (
-                  <>{errorMsg}</>
-                )}
-              </div> */}
+           
           </Box>
           <Button
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 2 , backgroundColor: '#2168BA', color: 'white'}}
             variant="contained"
             type="submit"
-            color={"primary"}
           >
             Login
           </Button>
@@ -127,15 +173,14 @@ function Login() {
         >
           <Button
             fullWidth
-            sx={{ mt: 1 }}
+            sx={{ mt: 1, backgroundColor: '#FFC107', color: 'black' }}
             variant="contained"
             type="submit"
-            color={"warning"}
-            onClick={()=>navigate("/register")}
+            onClick={() => navigate("/register")}
           >
-            I am  New
+            I am New
           </Button>
-          
+
           <Link
             onClick={() => {
               console.log("clicked");

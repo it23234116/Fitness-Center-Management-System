@@ -23,94 +23,16 @@ const connectDB = async () => {
   }
 };
 
-
-/*const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${process.env.DB_User}:${process.env.Password12345}@cluster1.4268e.mongodb.net/?appName=Cluster1`;
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-
-    //create a database and collection
-    const database = client.db("fusers");
-    const userCollection = database.collection("user");
-    const userCollection = database.collection("admin");
-
-    //classes routes here
-    app.post('/new-class',()=>{
-      const newClass = req.body;
-      //newClass.availableSeats = parseInt(newClass.availableSeats);
-      const result = await classesCollection.insertOne(newClass);
-      res.send(result);
-
-    })
-
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);*/
-
 // Connect to MongoDB
 connectDB();
 
 
-//////////////////Routers 
+//Routers 
 
 const userRouters = require("./routes/user")
  app.use("/user", userRouters)
-// Sample route
-app.get('/users', async(req, res) => {
-  res.send('Fitness Center API is running...');
-});
-/*app.get('/users', async(req, res) => {
-  const query = (status: 'approved');
-  const result = await usercollection.find().toArray();
-  res.send(result);
-});*/
 
-// //manage user
-// app.get('/user-manage',async(req,res) => {
-//   const result = await usercollection.find().toArray();
-//   re.send(result);
-// })
-
-// //update user
-// app.put('/user-update',async(req,res) => {
-//   const id =req.params.id;
-   
-// })
 
 // Set the port and start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-//-----------------Tharindu (Workout & Diet Plan)--------------------------
-
-// ####### Workout Plan ##########
-
-const workoutPlanRoutes = require('./routes/workoutPlanRoutes'); // Import workout plan routes
-app.use(workoutPlanRoutes);
-
-// ####### Workout Plan ##########
-
-const dietPlanRoutes = require('./routes/dietPlanRoutes'); // Import diet plan routes
-app.use(dietPlanRoutes);
-
-
-//-----------------Tharindu (Workout & Diet Plan)--------------------------
-//Sample 
