@@ -80,7 +80,7 @@ const [passwordError, setPasswordError] = useState("");
               if (user.role === "admin") {
                 navigate("/userinfo");
               } else if (user.role === "member") {
-                navigate("/item01");
+                navigate("/home");
               } else {
                 setError("Invalid user role");
               }

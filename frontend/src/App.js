@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar/navbar"
 import Layout1 from "./Layout/layout1"
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 import Layout2 from "./Layout/layout2"
+import HomeLayout from "./Layout/homeLayout"
 
 const Login = React.lazy(()=> import ("./pages/Login/login"))
 const Register = React.lazy(()=> import ("./pages/Register/register"))
@@ -15,6 +16,8 @@ const Item01 = React.lazy(()=> import ("./pages/Item01/item01"))
 const Userinfo = React.lazy(()=> import ("./pages/Admin/Userinfo/userinfo"))
 const Profile =React.lazy(()=>import ("./pages/Profile/profile"))
 const Test =React.lazy(()=>import ("./pages/Test/test"))
+const Home =React.lazy(()=>import ("./pages/Home/home"))
+
 
 
 
@@ -41,6 +44,7 @@ const theme = createTheme ({
         path:"/profile",
         element:( <ProtectedRoute allowedRoles={["member"]||["admin"]}><Profile /></ProtectedRoute>),
       },
+     
       
       {
         path: "/",
@@ -74,6 +78,7 @@ const theme = createTheme ({
           </ProtectedRoute>
         ),
         children:[
+          
           {
             path:"/item01",
             element: <Item01 />,
@@ -82,6 +87,22 @@ const theme = createTheme ({
             path:"/test",
             element: <Test />,
           },
+          
+        ]
+      },
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["member"]}>
+          <HomeLayout/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/home",
+            element: <Home />,
+          }
+         
           
         ]
       }

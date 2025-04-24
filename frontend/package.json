@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@iconify/react": "^5.2.1",
     "webpack": "^5.98.0"
   },
   "browser": {
