@@ -1,24 +1,120 @@
-import logo from './logo.svg';
-import './App.css';
+import { createTheme, ThemeProvider } from "@mui/material";
+import React,{lazy} from "react";import { BrowserRouter as Router, Route, Routes, RouterProvider, createBrowserRouter } from "react-router-dom";
+import palette  from "./theme/palette"
+import Loading from "./components/Loading/Loading";
+import typography from "./theme/typography";
+import './App.css'
+import Navbar from "./components/Navbar/navbar"
+import Layout1 from "./Layout/layout1"
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
+import Layout2 from "./Layout/layout2"
+import HomeLayout from "./Layout/homeLayout"
 
+const Login = React.lazy(()=> import ("./pages/Login/login"))
+const Register = React.lazy(()=> import ("./pages/Register/register"))
+const Item01 = React.lazy(()=> import ("./pages/Item01/item01"))
+const Userinfo = React.lazy(()=> import ("./pages/Admin/Userinfo/userinfo"))
+const Profile =React.lazy(()=>import ("./pages/Profile/profile"))
+const Test =React.lazy(()=>import ("./pages/Test/test"))
+const Home =React.lazy(()=>import ("./pages/Home/home"))
+
+
+
+
+
+const theme = createTheme ({
+  palette: palette.light,
+  typography,
+
+})
+
+
+  const router = createBrowserRouter(
+    [
+      {
+        path:"/",
+        element: <Login />,
+      },
+      {
+        path:"/register",
+        element: <Register />,
+      },
+      
+      {
+        path:"/profile",
+        element:( <ProtectedRoute allowedRoles={["member"]||["admin"]}><Profile /></ProtectedRoute>),
+      },
+     
+      
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+          <Layout2/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/userinfo",
+            element: <Userinfo />,
+          },
+          // {
+          //   path:"path",
+          //   element:<Units01 />,
+          // }
+        ]
+      },
+
+
+
+
+
+
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["member"]}>
+          <Layout1/>
+          </ProtectedRoute>
+        ),
+        children:[
+          
+          {
+            path:"/item01",
+            element: <Item01 />,
+          },
+          {
+            path:"/test",
+            element: <Test />,
+          },
+          
+        ]
+      },
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["member"]}>
+          <HomeLayout/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/home",
+            element: <Home />,
+          }
+         
+          
+        ]
+      }
+    ]
+  )
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+    
+    <RouterProvider router={router} />
+
+    </ThemeProvider>
   );
 }
 
