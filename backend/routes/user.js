@@ -90,9 +90,31 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "User deleted successfully" });
+    // Set up email transport
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'YOUR_EMAIL@gmail.com',
+        pass: 'YOUR_APP_PASSWORD',
+      },
+    });
+
+    // Prepare email content
+    const mailOptions = {
+      from: 'YOUR_EMAIL@gmail.com',
+      to: user.email, // Assuming your User model has an 'email' field
+      subject: 'Account Deletion Confirmation',
+      text: `Hello ${user.firstName},\n\nYour account has been successfully deleted.\n\nRegards,\nYour Team`,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "User deleted and email sent successfully" });
+
   } catch (error) {
-    res.status(500).json({ message: "Error deleting user", error });
+    console.error("Error deleting user or sending email:", error);
+    res.status(500).json({ message: "Error deleting user or sending email", error });
   }
 });
 
@@ -226,4 +248,26 @@ router.post("/reset-password/:id/:token", (req, res) => {
     }
   });
 });
+router.put("/request-delete/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Find the user and update the deleteRequest field to true
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { deleteRequest: true },
+      { new: true } // return the updated document
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Delete request submitted successfully", user });
+  } catch (error) {
+    console.error("Error submitting delete request:", error);
+    res.status(500).json({ message: "Error submitting delete request", error });
+  }
+});
+
 module.exports = router;

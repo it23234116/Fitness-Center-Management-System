@@ -43,6 +43,26 @@ function Userinfo() {
     console.log("User clicked");
   }, []);
 
+  const handleDelete = async (userId, userEmail) => {
+    try {
+      await axios.delete(`http://localhost:5000/user/${userId}`);
+      alert("User deleted successfully!");
+  
+      // Send email notification
+      await axios.post(`http://localhost:5000/send-email`, {
+        to: userEmail,
+        subject: "Account Deleted",
+        text: "Your account has been deleted successfully."
+      });
+  
+      // Refresh the list
+      const response = await axios.get("http://localhost:5000/user");
+      setlistofUsers(response.data);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  
   return (
     <MainDiv>
       <Grid container>
@@ -87,6 +107,7 @@ function Userinfo() {
                   <th align="right">Phone</th>
                   <th align="right">Height</th>
                   <th align="right">Weight</th>
+                  <th align="right">Request</th>
                   <th align="right">Action </th>
                 </tr>
               </thead>
@@ -109,8 +130,16 @@ function Userinfo() {
                       <td align="right">{user.height}</td>
                       <td align="right">{user.weight}</td>
                       <td align="right">
+                        {user.deleteRequest ? (
+                          <span style={{ color: "red" }}>Requested</span>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+
+                      <td align="right">
                         <button
-                          onClick={""}
+                            onClick={() => handleDelete(user._id, user.email)}
                           style={{
                             backgroundColor: "red",
                             color: "white",
