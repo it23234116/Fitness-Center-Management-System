@@ -11,7 +11,7 @@ function test() {
                  
         textAlign: 'center',
       }}>
-      test
+      store
     </div>
   )
 }

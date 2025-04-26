@@ -14,6 +14,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import { Icon, icon } from "@iconify/react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useNavigate } from "react-router-dom";
 
 const MainDiv = styled("div")({
   display: "flex",
@@ -36,6 +37,8 @@ const images = [
 ];
 function Home() {
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
+
 
   const prevImage = () => {
     setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -110,7 +113,7 @@ function Home() {
                     minHeight: 100,
                     borderRadius: 4,
                   }}
-                  // onClick={() => onClick(content)}
+                  onClick={() => navigate("/session")}
                 >
                   <FlexContainer
                     sx={{
@@ -140,7 +143,7 @@ function Home() {
                   variant={"contained"}
                   fullWidth
                   sx={{ borderRadius: 4, minHeight: 80 }}
-                  // onClick={() => onClick(content)}
+                  onClick={() => navigate("/schedule")}
                 >
                   <FlexContainer
                     sx={{
@@ -169,7 +172,7 @@ function Home() {
                   variant={"contained"}
                   fullWidth
                   sx={{ borderRadius: 4, minHeight: 80 }}
-                  // onClick={() => onClick(content)}
+                  onClick={() => navigate("/store")}
                 >
                   <FlexContainer
                     sx={{

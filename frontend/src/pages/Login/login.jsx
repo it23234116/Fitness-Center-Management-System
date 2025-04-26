@@ -182,7 +182,7 @@ const [passwordError, setPasswordError] = useState("");
           </Button>
 
           <Link
-            onClick={() => {
+            onClick={() => {navigate("/forgot-password")
               console.log("clicked");
               // setShowModal(true);
             }}

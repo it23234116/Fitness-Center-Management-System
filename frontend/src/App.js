@@ -17,6 +17,10 @@ const Userinfo = React.lazy(()=> import ("./pages/Admin/Userinfo/userinfo"))
 const Profile =React.lazy(()=>import ("./pages/Profile/profile"))
 const Test =React.lazy(()=>import ("./pages/Test/test"))
 const Home =React.lazy(()=>import ("./pages/Home/home"))
+const ForgotPassword =React.lazy(()=>import ("./pages/ForgotPassword/ForgotPassword"))
+const ResetPassword =React.lazy(()=>import ("./pages/Reset_Password/ResetPassword"))
+
+
 
 
 
@@ -38,6 +42,14 @@ const theme = createTheme ({
       {
         path:"/register",
         element: <Register />,
+      },
+      {
+        path:"/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path:"/reset-password/:id/:token",
+        element: <ResetPassword />,
       },
       
       {
@@ -80,11 +92,11 @@ const theme = createTheme ({
         children:[
           
           {
-            path:"/item01",
+            path:"/session",
             element: <Item01 />,
           },
           {
-            path:"/test",
+            path:"/store",
             element: <Test />,
           },
           

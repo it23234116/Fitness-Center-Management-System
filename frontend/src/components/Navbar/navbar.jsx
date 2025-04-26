@@ -17,8 +17,9 @@ const TopNavigation = () => {
   }, [location.pathname]);
 
   const navigationItems = [
-    { name: " Item 01", path: "/item01" },
-    { name: "Item test", path: "/test" },
+    { name: " Home", path: "/home" },
+    { name: " Session", path: "/session" },
+    { name: "Store", path: "/store" },
 
   ];
 
