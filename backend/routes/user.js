@@ -94,14 +94,14 @@ router.delete("/:id", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'YOUR_EMAIL@gmail.com',
-        pass: 'YOUR_APP_PASSWORD',
+        user: 'wgikumayanga@gmail.com',
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     // Prepare email content
     const mailOptions = {
-      from: 'YOUR_EMAIL@gmail.com',
+      from: 'wgikumayanga@gmail.com',
       to: user.email, // Assuming your User model has an 'email' field
       subject: 'Account Deletion Confirmation',
       text: `Hello ${user.firstName},\n\nYour account has been successfully deleted.\n\nRegards,\nYour Team`,

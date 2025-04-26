@@ -44,20 +44,18 @@ function Userinfo() {
   }, []);
 
   const handleDelete = async (userId, userEmail) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+  
+    if (!confirmDelete) {
+      return; // If admin cancels, just return and do nothing
+    }
     try {
       await axios.delete(`http://localhost:5000/user/${userId}`);
       alert("User deleted successfully!");
-  
-      // Send email notification
-      await axios.post(`http://localhost:5000/send-email`, {
-        to: userEmail,
-        subject: "Account Deleted",
-        text: "Your account has been deleted successfully."
-      });
-  
-      // Refresh the list
-      const response = await axios.get("http://localhost:5000/user");
-      setlistofUsers(response.data);
+      window.location.reload();
+     
+          // const response = await axios.get("http://localhost:5000/user");
+      // setlistofUsers(response.data);
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -131,7 +129,7 @@ function Userinfo() {
                       <td align="right">{user.weight}</td>
                       <td align="right">
                         {user.deleteRequest ? (
-                          <span style={{ color: "red" }}>Requested</span>
+                          <span style={{ color: "red" }}>Requested to Delete</span>
                         ) : (
                           "-"
                         )}
