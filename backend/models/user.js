@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema(
       enum: ["admin", "member"], // Allowed roles are only "admin" and "member"
       default: "member", // Default role is "member"
     },
+    deleteRequest: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

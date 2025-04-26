@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar/navbar"
 import Layout1 from "./Layout/layout1"
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 import Layout2 from "./Layout/layout2"
+import HomeLayout from "./Layout/homeLayout"
 
 const Login = React.lazy(()=> import ("./pages/Login/login"))
 const Register = React.lazy(()=> import ("./pages/Register/register"))
@@ -15,6 +16,12 @@ const Item01 = React.lazy(()=> import ("./pages/Item01/item01"))
 const Userinfo = React.lazy(()=> import ("./pages/Admin/Userinfo/userinfo"))
 const Profile =React.lazy(()=>import ("./pages/Profile/profile"))
 const Test =React.lazy(()=>import ("./pages/Test/test"))
+const Home =React.lazy(()=>import ("./pages/Home/home"))
+const ForgotPassword =React.lazy(()=>import ("./pages/ForgotPassword/ForgotPassword"))
+const ResetPassword =React.lazy(()=>import ("./pages/Reset_Password/ResetPassword"))
+
+
+
 
 
 
@@ -36,11 +43,20 @@ const theme = createTheme ({
         path:"/register",
         element: <Register />,
       },
+      {
+        path:"/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path:"/reset-password/:id/:token",
+        element: <ResetPassword />,
+      },
       
       {
         path:"/profile",
         element:( <ProtectedRoute allowedRoles={["member"]||["admin"]}><Profile /></ProtectedRoute>),
       },
+     
       
       {
         path: "/",
@@ -74,14 +90,31 @@ const theme = createTheme ({
           </ProtectedRoute>
         ),
         children:[
+          
           {
-            path:"/item01",
+            path:"/session",
             element: <Item01 />,
           },
           {
-            path:"/test",
+            path:"/store",
             element: <Test />,
           },
+          
+        ]
+      },
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute allowedRoles={["member"]}>
+          <HomeLayout/>
+          </ProtectedRoute>
+        ),
+        children:[
+          {
+            path:"/home",
+            element: <Home />,
+          }
+         
           
         ]
       }

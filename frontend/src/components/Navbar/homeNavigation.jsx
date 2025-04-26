@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Box, Typography, IconButton, Modal, Paper, Button } fr
 import { useNavigate, useLocation } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const TopNavigation = () => {
+const HomeNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
@@ -17,9 +17,8 @@ const TopNavigation = () => {
   }, [location.pathname]);
 
   const navigationItems = [
-    { name: " Home", path: "/home" },
-    { name: " Session", path: "/session" },
-    { name: "Store", path: "/store" },
+    { name: " Item 01", path: "/item01" },
+    { name: "Item test", path: "/test" },
 
   ];
 
@@ -43,7 +42,7 @@ const TopNavigation = () => {
     <AppBar position="fixed" sx={{ backgroundColor: "#1351BF", px: 3 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
       <Box sx={{ display: "flex", gap: 4 }}>
-        {navigationItems.map((item) => (
+        {/* {navigationItems.map((item) => (
           <Typography
             key={item.name}
             sx={{
@@ -57,7 +56,7 @@ const TopNavigation = () => {
           >
             {item.name}
           </Typography>
-        ))}
+        ))} */}
                 </Box>
 
         
@@ -100,4 +99,4 @@ const TopNavigation = () => {
   );
 };
 
-export default TopNavigation;
+export default HomeNavigation;
