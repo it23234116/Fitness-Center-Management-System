@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 //   import { setIsAuth } from "../../reducers/isAuthSlise";
 import { useDispatch } from "react-redux";
-import BG from "../../Assests/BG.jpg";
+import BG from "../../Assests/BG2.jpg";
 //import Logopng from "../../Assests/logo-no-background.png";
 import Logopng from "../../Assests/maxxieslogos.png";
 import FlexContainer from "../../components/FlexContainer/FlexContainer";

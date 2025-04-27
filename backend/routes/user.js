@@ -92,29 +92,32 @@ router.delete("/:id", async (req, res) => {
 
     // Set up email transport
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: 'wgikumayanga@gmail.com',
+        user: "sachinthawg36@gmail.com",
         pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     // Prepare email content
     const mailOptions = {
-      from: 'wgikumayanga@gmail.com',
+      from: "sachinthawg36@gmail.com",
       to: user.email, // Assuming your User model has an 'email' field
-      subject: 'Account Deletion Confirmation',
-      text: `Hello ${user.firstName},\n\nYour account has been successfully deleted.\n\nRegards,\nYour Team`,
+      subject: "Account Deletion Confirmation",
+      text: `Hello ${user.firstName},\n\nYour account has been successfully deleted.\n\nRegards,\nTeam Maxxies`,
     };
 
     // Send the email
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: "User deleted and email sent successfully" });
-
+    res
+      .status(200)
+      .json({ message: "User deleted and email sent successfully" });
   } catch (error) {
     console.error("Error deleting user or sending email:", error);
-    res.status(500).json({ message: "Error deleting user or sending email", error });
+    res
+      .status(500)
+      .json({ message: "Error deleting user or sending email", error });
   }
 });
 
@@ -191,6 +194,8 @@ router.post("/login", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     });
 });
+
+//forget password
 router.post("/forgot-password", (req, res) => {
   const { email } = req.body;
   UserModel.findOne({ email: email }).then((user) => {
@@ -204,17 +209,17 @@ router.post("/forgot-password", (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "wgikumayanga@gmail.com",
+        user: "sachinthawg36@gmail.com",
         pass: process.env.EMAIL_PASSWORD,
       },
     });
 
     var mailOptions = {
-      from: "youremail@gmail.com",
+      from: "sachinthawg36@gmail.com",
       to: email,
       subject: "Reset Your Password",
       text:
-        "Click the Link to Reset the Password" +
+        "Click the Link to Reset the Password -" +
         " " +
         `http://localhost:3000/reset-password/${user.id}/${token}`,
     };
@@ -228,17 +233,17 @@ router.post("/forgot-password", (req, res) => {
     });
   });
 });
-
+//reset password
 router.post("/reset-password/:id/:token", (req, res) => {
   const { id, token } = req.params;
-  const { newPassword  } = req.body;
+  const { newPassword } = req.body;
 
   jwt.verify(token, "RP_secret_Key", (error, decoded) => {
     if (error) {
       return res.json({ status: "Error with Token" });
     } else {
       bcrypt
-        .hash(newPassword , 10)
+        .hash(newPassword, 10)
         .then((hash) => {
           UserModel.findByIdAndUpdate(id, { password: hash })
             .then((u) => res.send({ status: "Success" }))
@@ -248,6 +253,7 @@ router.post("/reset-password/:id/:token", (req, res) => {
     }
   });
 });
+//request delete
 router.put("/request-delete/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -263,7 +269,9 @@ router.put("/request-delete/:id", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Delete request submitted successfully", user });
+    res
+      .status(200)
+      .json({ message: "Delete request submitted successfully", user });
   } catch (error) {
     console.error("Error submitting delete request:", error);
     res.status(500).json({ message: "Error submitting delete request", error });

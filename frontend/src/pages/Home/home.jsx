@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import BG from "../../Assests/BG.jpg";
+import BG from "../../Assests/BG2.jpg";
 import Logopng from "../../Assests/maxxieslogos.png";
 import FlexContainer from "../../components/FlexContainer/FlexContainer";
 import ScheduleIcon from "@mui/icons-material/Schedule";
